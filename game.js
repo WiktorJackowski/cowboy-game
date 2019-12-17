@@ -1,6 +1,7 @@
 var game = new Phaser.Game(1000, 800, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 let player;
 let ball;
+let cursors;
 
 function preload() {
     game.load.spritesheet('background' , 'assets/background.png', 1000 , 800);
@@ -22,10 +23,31 @@ function create() {
     ball.body.bounce.x = 0.95;
     ball.body.collideWorldBounds = true;
     ball.body.velocity.setTo(200,200);
+
+    cursors = game.input.keyboard.createCursorKeys();
 }
 
 function update() {
     game.physics.arcade.collide(player, ball);
+
+    if (cursors.left.isDown)
+    {
+        player.scale.x *= -1;
+        player.body.velocity.x -= 4;
+    }
+    else if (cursors.right.isDown)
+    {
+        player.body.velocity.x += 4;
+    }
+
+    if (cursors.up.isDown)
+    {
+        player.body.velocity.y -= 4;
+    }
+    else if (cursors.down.isDown)
+    {
+        player.body.velocity.y += 4;
+    }
 }
 
 function render() {
