@@ -1,38 +1,48 @@
-var game = new Phaser.Game(1000, 800, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
+var game = new Phaser.Game(1000, 800, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 let player;
+let clonesGroup;
 let ball;
 let cursors;
-let clones;
+let bg;
 
 function preload() {
     game.load.spritesheet('background' , 'assets/background.png', 1000 , 800);
     game.load.spritesheet('kowboj' , 'assets/kowboj.png', 766, 468);
     game.load.spritesheet('pilka', 'assets/pilka.png', 100, 100);
-    game.load.spritesheet('clone-trooper', 'assets/clone-trooper.png', 750,1235);
+    game.load.image('clone-trooper', 'assets/clone-trooper.png');
 }
 
 function create() {
+    clonesGroup = game.add.group();
+
     prepareSprites();
 
-    game.physics.arcade.enable([player, ball, clones]) ;
+
+    game.physics.arcade.enable([player, clonesGroup, ball]);
+
     game.physics.arcade.gravity.y = 200;
 
     player.body.collideWorldBounds = true;
     player.body.allowGravity = false;
     player.body.immovable = true;
 
+    clonesGroup.collideWorldBounds = true;
+    clonesGroup.immovable = true;
+
     ball.body.bounce.y = 0.95;
     ball.body.bounce.x = 0.95;
     ball.body.collideWorldBounds = true;
     ball.body.velocity.setTo(200,200);
 
-    clones.body.velocity.setTo(-400,0);
+
 
     cursors = game.input.keyboard.createCursorKeys();
 }
 
 function update() {
-    game.physics.arcade.collide(player, ball);
+    game.physics.arcade.collide(player, clonesGroup, ball);
+
+
 
     if (cursors.left.isDown)
     {
@@ -60,10 +70,18 @@ function render() {
 }
 
 function prepareSprites(){
-    game.add.tileSprite(0,0,1000,800,'background');
+    //bg = game.add.sprite(0,0,'background');
     ball = game.add.sprite(800,0, 'pilka');
     player = game.add.sprite(0,600,'kowboj');
     player.scale.setTo(0.4,0.4);
-    clones = game.add.sprite(900, 600,'clone-trooper');
-    clones.scale.setTo(0.17,0.13);
+
+    //clonesGroup.add(bg);
+
+    game.add.sprite(5000, 6000,'clone-trooper', 0, clonesGroup);
+    game.add.sprite(4500, 6000,'clone-trooper', 0, clonesGroup);
+    game.add.sprite(4000, 6000,'clone-trooper', 0, clonesGroup);
+    game.add.sprite(3500, 6000,'clone-trooper', 0, clonesGroup);
+    //clonesGroup.scale.setTo(1,1);
+    clonesGroup.width = 400;
+    clonesGroup.height = 130;
 }
