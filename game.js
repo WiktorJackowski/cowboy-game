@@ -14,11 +14,20 @@ function preload() {
 
 function create() {
     clonesGroup = game.add.group();
+    for (var i = 0; i < 16; i++)
+    {
+        //  This creates a new Phaser.Sprite instance within the group
+        //  It will be randomly placed within the world and use the 'baddie' image to display
+        clonesGroup.create(360 + Math.random() * 200, 120 + Math.random() * 200, 'clone-trooper', 200);
+    }
 
-    prepareSprites();
+    //bg = game.add.sprite(0,0,'background');
+    ball = game.add.sprite(800,0, 'pilka');
+    player = game.add.sprite(0,600,'kowboj');
+    player.scale.setTo(0.4,0.4);
 
 
-    game.physics.arcade.enable([player, clonesGroup, ball]);
+    game.physics.arcade.enable([player, ball]);
 
     game.physics.arcade.gravity.y = 200;
 
@@ -26,21 +35,23 @@ function create() {
     player.body.allowGravity = false;
     player.body.immovable = true;
 
-    clonesGroup.collideWorldBounds = true;
-    clonesGroup.immovable = true;
-
     ball.body.bounce.y = 0.95;
+
     ball.body.bounce.x = 0.95;
     ball.body.collideWorldBounds = true;
     ball.body.velocity.setTo(200,200);
-
-
-
     cursors = game.input.keyboard.createCursorKeys();
+
+
+
+    clonesGroup.setAll('body.collideWorldBounds', true);
+    clonesGroup.setAll('body.bounce.x', 1);
+    clonesGroup.setAll('body.bounce.y', 1);
 }
 
 function update() {
-    game.physics.arcade.collide(player, clonesGroup, ball);
+    game.physics.arcade.collide(player, ball);
+    game.physics.arcade.collide(clonesGroup);
 
 
 
@@ -67,21 +78,4 @@ function update() {
 
 function render() {
 
-}
-
-function prepareSprites(){
-    //bg = game.add.sprite(0,0,'background');
-    ball = game.add.sprite(800,0, 'pilka');
-    player = game.add.sprite(0,600,'kowboj');
-    player.scale.setTo(0.4,0.4);
-
-    //clonesGroup.add(bg);
-
-    game.add.sprite(5000, 6000,'clone-trooper', 0, clonesGroup);
-    game.add.sprite(4500, 6000,'clone-trooper', 0, clonesGroup);
-    game.add.sprite(4000, 6000,'clone-trooper', 0, clonesGroup);
-    game.add.sprite(3500, 6000,'clone-trooper', 0, clonesGroup);
-    //clonesGroup.scale.setTo(1,1);
-    clonesGroup.width = 400;
-    clonesGroup.height = 130;
 }
